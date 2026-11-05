@@ -12,6 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const kategoriRoutes = require("./routes/kategoriRoutes");
+const bukuRoutes = require("./routes/bukuRoutes");
+const errorHandler = require("./middlewares/errorHandler");
 // TODO C2: require route buku dari ./routes/bukuRoutes
 // TODO D2: require middleware errorHandler dari ./middlewares/errorHandler
 
@@ -20,18 +22,20 @@ app.use(express.json());
 
 app.use("/kategori", kategoriRoutes);
 // TODO C3: daftarkan route buku pada path "/buku"
-
+app.use("/buku", bukuRoutes);
 // TODO D3: daftarkan errorHandler sebagai middleware PALING AKHIR (setelah semua route)
+
 
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Terhubung ke MongoDB");
     app.listen(PORT, () => {
-      console.log(`Server berjalan di http://localhost:${PORT}`);
+      console.log(`Server berjalan di http://localhost:3000`);
     });
   })
   .catch((err) => {
     console.error("Gagal terhubung ke MongoDB:", err.message);
     process.exit(1);
   });
+app.use("/middlewares", errorHandler);
